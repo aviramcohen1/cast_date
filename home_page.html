@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Foreign to Hebrew Date Converter</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <h1>Foreign to Hebrew Date Converter</h1>
+  <form id="dateConverterForm">
+    <label for="foreignDate">Enter a foreign date:</label>
+    <input type="text" id="foreignDate" name="foreignDate" required>
+    <button type="submit">Convert</button>
+  </form>
+
+  <div id="result"></div>
+
+  <script>
+    $(document).ready(function() {
+      $('#dateConverterForm').submit(function(event) {
+        event.preventDefault();
+        var foreignDate = $('#foreignDate').val();
+        convertToHebrewDate(foreignDate);
+      });
+    });
+
+    function convertToHebrewDate(foreignDate) {
+      $.ajax({
+        url: 'https://www.hebcal.com/converter?cfg=json&gy=' + foreignDate.substring(0, 4) + '&gm=' + foreignDate.substring(5, 7) + '&gd=' + foreignDate.substring(8),
+        type: 'GET',
+        success: function(data) {
+          var hebrewDate = data.hebrew;
+          $('#result').text('Hebrew Date: ' + hebrewDate);
+        },
+        error: function() {
+          $('#result').text('Failed to convert the date.');
+        }
+      });
+    }
+  </script>
+</body>
+</html>
